@@ -16,10 +16,12 @@ namespace _12246765_OnlineStore.Controllers
         private MyStoreContext db = new MyStoreContext();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(string category)
         {
             var products = db.Products.Include(p => p.Category);
-            return View(products.ToList());
+            if (!String.IsNullOrEmpty(category)) {
+                products = products.Where(p => p.Category.Name == category);
+            } return View(products.ToList());
         }
 
         // GET: Products/Details/5

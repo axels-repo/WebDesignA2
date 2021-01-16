@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using _12246765_OnlineStore.Data;
 using _12246765_OnlineStore.Models;
+using _12246765_OnlineStore.ViewModels;
 
 namespace _12246765_OnlineStore.Controllers
 {
@@ -16,12 +17,34 @@ namespace _12246765_OnlineStore.Controllers
         private MyStoreContext db = new MyStoreContext();
 
         // GET: Products
-        public ActionResult Index(string category)
+        public ActionResult Index(string category, string search)
         {
+            ProductIndexViewModel viewModel = new ProductIndexViewModel();
             var products = db.Products.Include(p => p.Category);
-            if (!String.IsNullOrEmpty(category)) {
+            if (!String.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.Contains(search) ||
+                p.Description.Contains(search) ||
+                p.Category.Name.Contains(search));
+                viewModel.Search = search;
+            }
+            viewModel.CatsWithCount = from matchingProducts in products
+                                      where
+                                      matchingProducts.CategoryID != null
+                                      group matchingProducts by
+                                      matchingProducts.Category.Name into
+                                      catGroup
+                                      select new CategoryWithCount()
+                                      {
+                                          CategoryName = catGroup.Key,
+                                          ProductCount = catGroup.Count()
+                                      };
+            if (!String.IsNullOrEmpty(category))
+            {
                 products = products.Where(p => p.Category.Name == category);
-            } return View(products.ToList());
+            }
+            viewModel.Products = products;
+            return View(viewModel);
         }
 
         // GET: Products/Details/5

@@ -17,10 +17,14 @@ namespace _12246765_OnlineStore.Data
     
         public MyStoreContext() : base("name=MyStoreContext")
         {
+            
         }
 
         public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.Category> Categories { get; set; }
 
         public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.Product> Products { get; set; }
+        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImage> ProductImages { get; set; }
+
+        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImageMapping> ProductImageMappings { get; set; }
     }
 }

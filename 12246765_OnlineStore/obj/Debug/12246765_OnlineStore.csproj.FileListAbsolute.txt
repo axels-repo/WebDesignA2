@@ -88,3 +88,6 @@ C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\De
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.InitialDatabase.resources
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\12246765_OnlineStore.csproj.GenerateResource.cache
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.CategoryNameValidation.resources
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.ProductImages.resources
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.UniqueFileName.resources
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.CreateProductImageMappings.resources

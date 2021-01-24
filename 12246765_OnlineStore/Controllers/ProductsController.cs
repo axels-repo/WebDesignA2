@@ -58,9 +58,9 @@ namespace _12246765_OnlineStore.Controllers
                     products = products.OrderBy(p => p.Name);
                     break;
             }
-            const int PageItems = 5;
+            // const int PageItems = 5;
             int currentPage = (page ?? 1);
-            viewModel.Products = products.ToPagedList(currentPage, PageItems);
+            viewModel.Products = products.ToPagedList(currentPage, Constants.PagedItems);
             viewModel.SortBy = sortBy;
             viewModel.SortBy = sortBy;
             viewModel.Sorts = new Dictionary<string, string>{{"Price low to high", "price_lowest" },{"Price high to low", "price_highest" }};
@@ -85,8 +85,16 @@ namespace _12246765_OnlineStore.Controllers
         // GET: Products/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
-            return View();
+            //ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
+            //return View();
+            ProductViewModel viewModel = new ProductViewModel();
+            viewModel.CategoryList = new SelectList(db.Categories, "ID", "Name");
+            viewModel.ImageLists = new List<SelectList>();
+            for (int i = 0; i < Constants.NumberOfProductImages; i++)
+            {
+                viewModel.ImageLists.Add(new SelectList(db.ProductImages, "ID", "FileName"));
+            }
+            return View(viewModel);
         }
 
         // POST: Products/Create
@@ -94,8 +102,25 @@ namespace _12246765_OnlineStore.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Description,Price,CategoryID")] Product product)
+
+        public ActionResult Create(ProductViewModel viewModel)
         {
+            Product product = new Product();
+            product.Name = viewModel.Name;
+            product.Description = viewModel.Description;
+            product.Price = viewModel.Price;
+            product.CategoryID = viewModel.CategoryID;
+            product.ProductImageMappings = new List<ProductImageMapping>();
+            //get a list of selected Images without any blanks
+            string[] productImages = viewModel.ProductImages.Where(pi => !string.IsNullOrEmpty(pi)).ToArray();
+            for (int i = 0; i < productImages.Length; i++)
+            {
+                product.ProductImageMappings.Add(new ProductImageMapping
+                {
+                    ProductImage = db.ProductImages.Find(int.Parse(productImages[i])),
+                    ImageNumber = i
+                });
+            }
             if (ModelState.IsValid)
             {
                 db.Products.Add(product);
@@ -103,9 +128,28 @@ namespace _12246765_OnlineStore.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
-            return View(product);
+            viewModel.CategoryList = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
+            viewModel.ImageLists = new List<SelectList>();
+            for (int i = 0; i < Constants.NumberOfProductImages; i++)
+            {
+                viewModel.ImageLists.Add(new SelectList(db.ProductImages, "ID", "FileName", viewModel.ProductImages[i]));
+            }
+            // ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
+            return View(viewModel);
         }
+
+        //public ActionResult Create([Bind(Include = "ID,Name,Description,Price,CategoryID")] Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Products.Add(product);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
+        //    return View(product);
+        //}
 
         // GET: Products/Edit/5
         public ActionResult Edit(int? id)
@@ -119,8 +163,27 @@ namespace _12246765_OnlineStore.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
-            return View(product);
+            ProductViewModel viewModel = new ProductViewModel();
+            viewModel.CategoryList = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
+            viewModel.ImageLists = new List<SelectList>();
+            foreach (var imageMapping in product.ProductImageMappings.OrderBy(pim => pim.ImageNumber))
+            {
+                viewModel.ImageLists.Add(new SelectList(db.ProductImages, "ID", "FileName",
+                imageMapping.ProductImageID));
+            }
+            for (int i = viewModel.ImageLists.Count; i < Constants.NumberOfProductImages; i++)
+            {
+                viewModel.ImageLists.Add(new SelectList(db.ProductImages, "ID", "FileName"));
+            }
+            viewModel.ID = product.ID;
+            viewModel.Name = product.Name;
+            viewModel.Description = product.Description;
+            viewModel.Price = product.Price;
+            return View(viewModel);
+
+
+            //ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
+            //return View(product);
         }
 
         // POST: Products/Edit/5
@@ -128,20 +191,68 @@ namespace _12246765_OnlineStore.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Description,Price,CategoryID")] Product product)
+        public ActionResult Edit(ProductViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var productToUpdate = db.Products.Include(p => p.ProductImageMappings).Where(p => p.ID == viewModel.ID).Single();
+            if (TryUpdateModel(productToUpdate, "", new string[] { "Name", "Description", "Price", "CategoryID" }))
             {
-                db.Entry(product).State = EntityState.Modified;
+                if (productToUpdate.ProductImageMappings == null)
+                {
+                    productToUpdate.ProductImageMappings = new List<ProductImageMapping>();
+                }
+                //get a list of selected Images without any Blanks
+                string[] productImages = viewModel.ProductImages.Where(pi => !string.IsNullOrEmpty(pi)).ToArray();
+                for (int i = 0; i < productImages.Length; i++)
+                {
+                    //get the image currently stored
+                    var imageMappingToEdit = productToUpdate.ProductImageMappings.Where(pim => pim.ImageNumber == i).FirstOrDefault();
+                    //find the new image
+                    var image = db.ProductImages.Find(int.Parse(productImages[i]));
+                    //if there is nothing stored then we need to add new mapping
+                    if (imageMappingToEdit == null)
+                    {
+                        //add image to the imagemappings
+                        productToUpdate.ProductImageMappings.Add(new ProductImageMapping
+                        {
+                            ImageNumber = i,
+                            ProductImage = image,
+                            ProductImageID = image.ID
+                        });
+                    }
+                    //else its not a new file so edit the current mapping
+                    else
+                    {
+                        //if they are not the same
+                        if (imageMappingToEdit.ProductImageID != int.Parse(productImages[i]))
+                        {
+                            //assign image property of the image mapping
+
+                            imageMappingToEdit.ProductImage = image;
+                        }
+                    }
+                }
+                //delete any other imagemappings that the user did not include in their selections for the product
+                for (int i = productImages.Length; i < Constants.NumberOfProductImages; i++)
+                {
+                    var imageMappingToEdit = productToUpdate.ProductImageMappings.Where(pim => pim.ImageNumber == i).FirstOrDefault();
+                    //if there is something stored in the mapping
+                    if (imageMappingToEdit != null)
+                    {
+                        //delete the record form the mapping table directly
+                        //just calling productToUpdate.ProductImageMappings.Remove(imageMappingToEdit)
+                        //results in a FK error
+                        productToUpdate.ProductImageMappings.Remove(imageMappingToEdit);
+                    }
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", product.CategoryID);
-            return View(product);
+            return View(viewModel);
         }
 
-        // GET: Products/Delete/5
-        public ActionResult Delete(int? id)
+
+            // GET: Products/Delete/5
+            public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -165,6 +276,7 @@ namespace _12246765_OnlineStore.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {

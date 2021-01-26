@@ -26,5 +26,7 @@ namespace _12246765_OnlineStore.Data
         public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImage> ProductImages { get; set; }
 
         public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImageMapping> ProductImageMappings { get; set; }
+
+        public System.Data.Entity.DbSet<_12246765_OnlineStore.ViewModels.RoleViewModel> RoleViewModels { get; set; }
     }
 }

@@ -27,6 +27,7 @@
                     <li>@Html.RouteLink("View all our Products", "ProductsIndex")</li>
                     <li>@Html.ActionLink("Manage Images", "Index", "ProductImages")</li>
                 </ul>
+                @Html.Partial("_LoginPartial")
                 @*@using (Html.BeginForm("Index", "Products", FormMethod.Get, new
         {
             @class = "navbar-form navbar-left"

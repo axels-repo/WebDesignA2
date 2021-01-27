@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using _12246765_OnlineStore.Data;
 using _12246765_OnlineStore.Models;
 using _12246765_OnlineStore.ViewModels;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -140,60 +141,80 @@ namespace _12246765_OnlineStore.Controllers
         }
 
         // GET: RolesAdmin/Edit/5
-        public ActionResult Edit(string id)
+        public async Task<ActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RoleViewModel roleViewModel = db.RoleViewModels.Find(id);
-            if (roleViewModel == null)
+            var role = await RoleManager.FindByIdAsync(id);
+            if (role == null)
             {
                 return HttpNotFound();
             }
-            return View(roleViewModel);
+            RoleViewModel roleModel = new RoleViewModel { Id = role.Id, Name = role.Name };
+            return View(roleModel);
         }
+
 
         // POST: RolesAdmin/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] RoleViewModel roleViewModel)
+        public async Task<ActionResult> Edit(RoleViewModel roleModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(roleViewModel).State = EntityState.Modified;
-                db.SaveChanges();
+                var role = await RoleManager.FindByIdAsync(roleModel.Id);
+                role.Name = roleModel.Name;
+                await RoleManager.UpdateAsync(role);
                 return RedirectToAction("Index");
             }
-            return View(roleViewModel);
+            return View();
         }
 
+
         // GET: RolesAdmin/Delete/5
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RoleViewModel roleViewModel = db.RoleViewModels.Find(id);
-            if (roleViewModel == null)
-            {
+            var role = await RoleManager.FindByIdAsync(id);
+            if(role == null)
+{
                 return HttpNotFound();
             }
-            return View(roleViewModel);
+            return View(role);
         }
 
         // POST: RolesAdmin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            RoleViewModel roleViewModel = db.RoleViewModels.Find(id);
-            db.RoleViewModels.Remove(roleViewModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var role = await RoleManager.FindByIdAsync(id);
+                if (role == null)
+                {
+                    return HttpNotFound();
+                }
+                IdentityResult result = await RoleManager.DeleteAsync(role);
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
         protected override void Dispose(bool disposing)

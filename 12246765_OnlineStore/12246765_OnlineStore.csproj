@@ -184,36 +184,28 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202101160858274_InitialDatabase.cs" />
-    <Compile Include="Migrations\202101160858274_InitialDatabase.Designer.cs">
-      <DependentUpon>202101160858274_InitialDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\202101300319478_twocontextreset.cs" />
+    <Compile Include="Migrations\202101300319478_twocontextreset.Designer.cs">
+      <DependentUpon>202101300319478_twocontextreset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202101160900009_CategoryNameValidation.cs" />
-    <Compile Include="Migrations\202101160900009_CategoryNameValidation.Designer.cs">
-      <DependentUpon>202101160900009_CategoryNameValidation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101200229071_ProductImages.cs" />
-    <Compile Include="Migrations\202101200229071_ProductImages.Designer.cs">
-      <DependentUpon>202101200229071_ProductImages.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101200551249_UniqueFileName.cs" />
-    <Compile Include="Migrations\202101200551249_UniqueFileName.Designer.cs">
-      <DependentUpon>202101200551249_UniqueFileName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101240051001_CreateProductImageMappings.cs" />
-    <Compile Include="Migrations\202101240051001_CreateProductImageMappings.Designer.cs">
-      <DependentUpon>202101240051001_CreateProductImageMappings.cs</DependentUpon>
+    <Compile Include="Migrations\202101300320432_update_user_fields.cs" />
+    <Compile Include="Migrations\202101300320432_update_user_fields.Designer.cs">
+      <DependentUpon>202101300320432_update_user_fields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\StoreConfiguration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryMetaData.cs" />
+    <Compile Include="Models\EditUserViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductImage.cs" />
     <Compile Include="Models\ProductImageMapping.cs" />
     <Compile Include="Models\ProductMetaData.cs" />
+    <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\ProductIndexViewModel.cs" />
@@ -246,7 +238,6 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
@@ -257,6 +248,17 @@
     <Content Include="Views\RolesAdmin\Edit.cshtml" />
     <Content Include="Views\RolesAdmin\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Index.cshtml" />
+    <Content Include="Views\UsersAdmin\Details.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Address.cshtml" />
+    <Content Include="Views\UsersAdmin\Create.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
+    <Content Include="Views\UsersAdmin\Edit.cshtml" />
+    <Content Include="Views\Shared\_CreateRegisterUserPartial.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Shared\_UserDetailsPartial.cshtml" />
+    <Content Include="Views\Manage\Edit.cshtml" />
+    <Content Include="Views\Shared\_EditUserPartial.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -339,20 +341,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101160858274_InitialDatabase.resx">
-      <DependentUpon>202101160858274_InitialDatabase.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202101300319478_twocontextreset.resx">
+      <DependentUpon>202101300319478_twocontextreset.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101160900009_CategoryNameValidation.resx">
-      <DependentUpon>202101160900009_CategoryNameValidation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101200229071_ProductImages.resx">
-      <DependentUpon>202101200229071_ProductImages.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101200551249_UniqueFileName.resx">
-      <DependentUpon>202101200551249_UniqueFileName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101240051001_CreateProductImageMappings.resx">
-      <DependentUpon>202101240051001_CreateProductImageMappings.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202101300320432_update_user_fields.resx">
+      <DependentUpon>202101300320432_update_user_fields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

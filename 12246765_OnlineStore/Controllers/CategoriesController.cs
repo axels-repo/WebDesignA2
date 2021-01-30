@@ -11,11 +11,14 @@ using _12246765_OnlineStore.Models;
 
 namespace _12246765_OnlineStore.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class CategoriesController : Controller
     {
         private MyStoreContext db = new MyStoreContext();
 
         // GET: Categories
+        [AllowAnonymous]
         public ActionResult Index()
         {
             //return View(db.Categories.ToList());

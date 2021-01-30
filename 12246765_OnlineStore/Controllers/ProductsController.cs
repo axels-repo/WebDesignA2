@@ -245,7 +245,7 @@ namespace _12246765_OnlineStore.Controllers
                         //delete the record form the mapping table directly
                         //just calling productToUpdate.ProductImageMappings.Remove(imageMappingToEdit)
                         //results in a FK error
-                        productToUpdate.ProductImageMappings.Remove(imageMappingToEdit);
+                        db.ProductImageMappings.Remove(imageMappingToEdit);
                     }
                 }
                 db.SaveChanges();
@@ -277,6 +277,11 @@ namespace _12246765_OnlineStore.Controllers
         {
             Product product = db.Products.Find(id);
             db.Products.Remove(product);
+            var orderLines = db.OrderLines.Where(ol => ol.ProductID == id);
+            foreach (var ol in orderLines)
+            {
+                ol.ProductID = null;
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }

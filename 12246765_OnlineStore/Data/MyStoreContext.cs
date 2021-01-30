@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _12246765_OnlineStore.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -20,13 +21,17 @@ namespace _12246765_OnlineStore.Data
             
         }
 
-        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
-        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.Product> Products { get; set; }
-        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImage> ProductImages { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
-        public System.Data.Entity.DbSet<_12246765_OnlineStore.Models.ProductImageMapping> ProductImageMappings { get; set; }
+        public DbSet<ProductImageMapping> ProductImageMappings { get; set; }
 
-        public System.Data.Entity.DbSet<_12246765_OnlineStore.ViewModels.RoleViewModel> RoleViewModels { get; set; }
+        public DbSet<ViewModels.RoleViewModel> RoleViewModels { get; set; }
+        public DbSet<BasketLine> BasketLines { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
+
     }
 }

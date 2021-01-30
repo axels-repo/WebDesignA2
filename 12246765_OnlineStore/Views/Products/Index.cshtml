@@ -6,7 +6,7 @@
     ViewBag.Title = "Products";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @(String.IsNullOrWhiteSpace(Model.Search) ? "Showing all" : "You search for " + Model.Search + " found")
@@ -26,6 +26,8 @@
 </p>
 <table class="table">
     <tr>
+        <th>
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Category)
         </th>
@@ -47,9 +49,9 @@
     <td>
         @if (item.ProductImageMappings != null && item.ProductImageMappings.Any())
         {
-            <a href="@Url.Action("Details", new {id= item.ID})">
-                <img src="@(Url.Content(Constants.ProductImagePath) + item.ProductImageMappings.OrderBy(pim=>pim.ImageNumber).ElementAt(0).ProductImage.FileName)" />
-            </a>
+        <a href="@Url.Action("Details", new {id= item.ID})">
+            <img src="@(Url.Content(Constants.ProductThumbnailPath) + item.ProductImageMappings.OrderBy(pim=>pim.ImageNumber).ElementAt(0).ProductImage.FileName)" />
+        </a>
         }
     </td>
     <td>

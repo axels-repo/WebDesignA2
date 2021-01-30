@@ -73,13 +73,29 @@ namespace _12246765_OnlineStore.Controllers
                 return View(model);
             }
 
+            bool userWasLoggedIn = false;
+            if (!string.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+                userWasLoggedIn = true;
+            }
+
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (userWasLoggedIn)
+                    { 
+                        Session.Abandon();
+                    }
+                    Basket basket = Basket.GetBasket();
+                    if (!userWasLoggedIn)
+                    {
+                        basket.MigrateBasket(model.Email);
+                    }
+                        return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -164,6 +180,9 @@ namespace _12246765_OnlineStore.Controllers
                 {
                     await UserManager.AddToRoleAsync(user.Id, "Users");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    Basket basket = Basket.GetBasket();
+                    basket.MigrateBasket(model.Email);
+
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -403,6 +422,7 @@ namespace _12246765_OnlineStore.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
 

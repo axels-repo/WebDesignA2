@@ -127,4 +127,6 @@ C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\bin\Mi
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\bin\System.Net.Http.Formatting.xml
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.StoreConfiguration.twocontextreset.resources
 C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.update_user_fields.resources
-C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\12246765_OnlineStore.csprojAssemblyReference.cache
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.StoreConfiguration.AddBasketLine.resources
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.StoreConfiguration.AddBasketLine1.resources
+C:\Users\Axel Seam\source\repos\12246765_OnlineStore\12246765_OnlineStore\obj\Debug\_12246765_OnlineStore.Migrations.StoreConfiguration.addorders.resources

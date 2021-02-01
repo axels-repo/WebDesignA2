@@ -175,6 +175,34 @@ DropCreateDatabaseIfModelChanges<ApplicationDbContext>
                     role = new IdentityRole(userRoleName);
                     var roleresult = roleManager.Create(role);
                 }
+                const string nameUser = "user@myStore.com";
+                const string passwordUser = "user@myStore.com!123";
+                const string roleNameUser = "Users";
+                var forUser = userManager.FindByName(nameUser);
+                if (forUser == null)
+                {
+                    forUser = new ApplicationUser
+                    {
+                        UserName = nameUser,
+                        Email = nameUser,
+                        FirstName = "User",
+                        LastName = "User",
+                        DateOfBirth = new DateTime(2015, 1, 1),
+                        Address = new Address
+                        {
+                            AddressLine1 = "1 User Road",
+                            Town = "Town",
+                            Country = "Country",
+                            PostCode = "PostCode"
+                        }
+                    };
+                    var result = userManager.Create(forUser, passwordUser);
+                    result = userManager.SetLockoutEnabled(forUser.Id, false);
+                    if (!rolesForUser.Contains(role.Name))
+                    {
+                        result = userManager.AddToRole(forUser.Id, role.Name);
+                    }
+                }
             }
         }
     }

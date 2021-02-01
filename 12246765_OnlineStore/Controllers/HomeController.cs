@@ -13,16 +13,16 @@ namespace _12246765_OnlineStore.Controllers
             return View();
         }
 
-        public ActionResult About(string id)
+        public ActionResult About()
         {
-            ViewBag.Message = "Your application description page. You enter the ID " + id;
+            ViewBag.Message = "Assignment 2 for Web Development Summer Semester 2020";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Axel Baylon";
 
             return View();
         }
